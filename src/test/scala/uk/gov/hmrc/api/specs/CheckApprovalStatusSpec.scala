@@ -21,11 +21,31 @@ import play.api.libs.ws.JsonBodyReadables.readableAsJson
 
 class CheckApprovalStatusSpec extends BaseSpec {
 
-  Scenario("Approval Status returns as Approved") {
+  Scenario("Approval Status returns as Approved - GET") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 200")
     val response = getCheckApprovalStatus("GBVA0000200DS")
+    response.status shouldBe 200
+    Then("ApprovalStatus should be APPROVED")
+    response.body   shouldBe Json.obj(
+      "approvalStatus"            -> JsString("APPROVED"),
+      "businessName"              -> JsString("Example Trading Ltd"),
+      "registeredBusinessAddress" -> JsString("10 Example Street, London, SW1A 1AA"),
+      "correspondenceAddress"     -> JsString("PO Box 123, London, SW1A 2AB"),
+      "contactName"               -> JsString("Jane Smith"),
+      "contactTelephone"          -> JsString("+44 20 7946 0123"),
+      "contactEmail"              -> JsString("jane.smith@example.com"),
+      "approvalNumber"            -> JsString("GBVA0000200DS"),
+      "stampThreshold"            -> JsNumber(500000)
+    )
+  }
+
+  Scenario("Approval Status returns as Approved - POST") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 200")
+    val response = postCheckApprovalStatus("GBVA0000200DS")
     response.status shouldBe 200
     Then("ApprovalStatus should be APPROVED")
     response.body   shouldBe Json.obj(

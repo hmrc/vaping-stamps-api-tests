@@ -24,7 +24,7 @@ import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import play.api.libs.ws.StandaloneWSRequest
 import uk.gov.hmrc.apitestrunner.http.HttpClient
 
-import scala.concurrent.{Await, Future}
+import scala.concurrent.Await
 import scala.concurrent.duration.DurationInt
 
 trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with HttpClient {
@@ -58,7 +58,21 @@ trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with Http
       10.seconds
     )
 
-  def postCheckApprovalStatus: Future[StandaloneWSRequest#Response] =
-    mkRequest("localhost:7011/status/:vdsApprovalId/summary").post("")
-
+  def postCheckApprovalStatus(id: String): StandaloneWSRequest#Response =
+    Await.result(
+      mkRequest("http://localhost:7011/status")
+        .withHttpHeaders(
+          "Authorization" -> bearerToken,
+          "Content-Type"  -> "application/json"
+        )
+        .post(
+          Json.stringify(
+            Json.obj(
+              "contactEmail"  -> JsString("email@test.com"),
+              "vdsApprovalId" -> JsString(id)
+            )
+          )
+        ),
+      10.seconds
+    )
 }
