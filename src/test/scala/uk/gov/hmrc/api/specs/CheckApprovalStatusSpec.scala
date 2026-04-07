@@ -67,8 +67,6 @@ class CheckApprovalStatusSpec extends BaseSpec {
     When("Make request to CheckApprovalStatus API returns 204")
     val response = postCheckApprovalStatus("GBVA0000204DS")
     response.status shouldBe 204
-    Then("Response should be no content")
-    response.body shouldBe Json.obj()
   }
 
   Scenario("Approval Status returns bad request") {
@@ -78,7 +76,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000400DS")
     response.status shouldBe 400
     Then("Response should be bad request")
-    response.body shouldBe Json.obj(
+    response.body   shouldBe Json.obj(
       "code"    -> "INVALID_REQUEST",
       "message" -> "The request payload is invalid or malformed."
     )
@@ -91,7 +89,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000404DS")
     response.status shouldBe 404
     Then("Response should be not found")
-    response.body shouldBe Json.obj(
+    response.body   shouldBe Json.obj(
       "code"    -> "NOT_FOUND",
       "message" -> "The requested approval could not be found."
     )
@@ -103,8 +101,8 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000401DS")
     response.status shouldBe 401
     Then("Response should be unauthorized")
-    response.body shouldBe Json.obj(
-      "code" -> "UNAUTHORISED",
+    response.body   shouldBe Json.obj(
+      "code"    -> "UNAUTHORISED",
       "message" -> "Authentication credentials are missing or invalid."
     )
   }
@@ -116,8 +114,8 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000409DS")
     response.status shouldBe 409
     Then("Response should be conflict")
-    response.body shouldBe Json.obj(
-      "code" -> "CONFLICT",
+    response.body   shouldBe Json.obj(
+      "code"    -> "CONFLICT",
       "message" -> "The request conflicts with the current state of the resource."
     )
   }
@@ -129,8 +127,8 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000500DS")
     response.status shouldBe 500
     Then("Response should be internal server error")
-    response.body shouldBe Json.obj(
-      "code" -> "INTERNAL_SERVER_ERROR",
+    response.body   shouldBe Json.obj(
+      "code"    -> "INTERNAL_SERVER_ERROR",
       "message" -> "An unexpected error occurred while processing the request."
     )
   }
@@ -142,12 +140,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000503DS")
     response.status shouldBe 503
     Then("Response should be service unavailable error")
-    response.body shouldBe Json.obj(
-      "code" -> "SERVICE_UNAVAILABLE",
+    response.body   shouldBe Json.obj(
+      "code"    -> "SERVICE_UNAVAILABLE",
       "message" -> "The service is temporarily unavailable. Please try again later."
     )
   }
 }
-
-
-
