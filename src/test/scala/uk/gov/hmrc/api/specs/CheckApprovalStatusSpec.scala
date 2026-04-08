@@ -73,7 +73,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 400")
-    val response = postCheckApprovalStatus("GBVA0000400DS")
+    val response = postCheckApprovalStatus("INVALID_ID")
     response.status shouldBe 400
     Then("Response should be bad request")
     response.body   shouldBe Json.obj(
@@ -86,7 +86,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 404")
-    val response = postCheckApprovalStatus("INVALID_ID")
+    val response = postCheckApprovalStatus("GBVA0000404DS")
     response.status shouldBe 404
     Then("Response should be not found")
     response.body   shouldBe Json.obj(
