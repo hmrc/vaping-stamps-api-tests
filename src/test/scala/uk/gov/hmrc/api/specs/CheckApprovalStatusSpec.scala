@@ -60,4 +60,89 @@ class CheckApprovalStatusSpec extends BaseSpec {
       "stampThreshold"            -> JsNumber(500000)
     )
   }
+
+  Scenario("Approval Status returns successful with no payload") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 204")
+    val response = postCheckApprovalStatus("GBVA0000204DS")
+    response.status shouldBe 204
+  }
+
+  Scenario("Approval Status returns bad request") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 400")
+    val response = postCheckApprovalStatus("INVALID_ID")
+    response.status shouldBe 400
+    Then("Response should be bad request")
+    response.body   shouldBe Json.obj(
+      "code"    -> "INVALID_REQUEST",
+      "message" -> "The request payload is invalid or malformed."
+    )
+  }
+
+  Scenario("Approval Status returns not found") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 404")
+    val response = postCheckApprovalStatus("GBVA0000404DS")
+    response.status shouldBe 404
+    Then("Response should be not found")
+    response.body   shouldBe Json.obj(
+      "code"    -> "NOT_FOUND",
+      "message" -> "The requested approval could not be found."
+    )
+  }
+
+  Scenario("Approval Status returns unauthorized") {
+    Given("User is not authenticated")
+    When("Make request to CheckApprovalStatus API returns 401")
+    val response = postCheckApprovalStatus("GBVA0000401DS")
+    response.status shouldBe 401
+    Then("Response should be unauthorized")
+    response.body   shouldBe Json.obj(
+      "code"    -> "UNAUTHORISED",
+      "message" -> "Authentication credentials are missing or invalid."
+    )
+  }
+
+  Scenario("Approval Status returns conflict") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 409")
+    val response = postCheckApprovalStatus("GBVA0000409DS")
+    response.status shouldBe 409
+    Then("Response should be conflict")
+    response.body   shouldBe Json.obj(
+      "code"    -> "CONFLICT",
+      "message" -> "The request conflicts with the current state of the resource."
+    )
+  }
+
+  Scenario("Approval Status returns internal server error") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 500")
+    val response = postCheckApprovalStatus("GBVA0000500DS")
+    response.status shouldBe 500
+    Then("Response should be internal server error")
+    response.body   shouldBe Json.obj(
+      "code"    -> "INTERNAL_SERVER_ERROR",
+      "message" -> "An unexpected error occurred while processing the request."
+    )
+  }
+
+  Scenario("Approval Status returns service unavailable error") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 503")
+    val response = postCheckApprovalStatus("GBVA0000503DS")
+    response.status shouldBe 503
+    Then("Response should be service unavailable error")
+    response.body   shouldBe Json.obj(
+      "code"    -> "SERVICE_UNAVAILABLE",
+      "message" -> "The service is temporarily unavailable. Please try again later."
+    )
+  }
 }
