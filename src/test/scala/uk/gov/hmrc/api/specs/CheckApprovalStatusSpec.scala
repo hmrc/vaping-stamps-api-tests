@@ -29,15 +29,14 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 200
     Then("ApprovalStatus should be APPROVED")
     response.body   shouldBe Json.obj(
-      "approvalStatus"            -> JsString("APPROVED"),
-      "businessName"              -> JsString("Example Trading Ltd"),
-      "registeredBusinessAddress" -> JsString("10 Example Street, London, SW1A 1AA"),
-      "correspondenceAddress"     -> JsString("PO Box 123, London, SW1A 2AB"),
-      "contactName"               -> JsString("Jane Smith"),
-      "contactTelephone"          -> JsString("+44 20 7946 0123"),
-      "contactEmail"              -> JsString("jane.smith@example.com"),
-      "approvalNumber"            -> JsString("GBVA0000200DS"),
-      "stampThreshold"            -> JsNumber(500000)
+      "approvalStatus"  -> JsString("APPROVED"),
+      "businessName"    -> JsString("Example Trading Ltd"),
+      "addressLine1"    -> JsString("10 Example Street"),
+      "addressLine2"    -> JsString("London"),
+      "postCode"        -> JsString("SW1A 1AA"),
+      "contactName"     -> JsString("Jane Smith"),
+      "telephoneNumber" -> JsString("+44 20 7946 0123"),
+      "stampsThreshold" -> JsNumber(500000)
     )
   }
 
@@ -49,15 +48,14 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 200
     Then("ApprovalStatus should be APPROVED")
     response.body   shouldBe Json.obj(
-      "approvalStatus"            -> JsString("APPROVED"),
-      "businessName"              -> JsString("Example Trading Ltd"),
-      "registeredBusinessAddress" -> JsString("10 Example Street, London, SW1A 1AA"),
-      "correspondenceAddress"     -> JsString("PO Box 123, London, SW1A 2AB"),
-      "contactName"               -> JsString("Jane Smith"),
-      "contactTelephone"          -> JsString("+44 20 7946 0123"),
-      "contactEmail"              -> JsString("jane.smith@example.com"),
-      "approvalNumber"            -> JsString("GBVA0000200DS"),
-      "stampThreshold"            -> JsNumber(500000)
+      "approvalStatus"  -> JsString("APPROVED"),
+      "businessName"    -> JsString("Example Trading Ltd"),
+      "addressLine1"    -> JsString("10 Example Street"),
+      "addressLine2"    -> JsString("London"),
+      "postCode"        -> JsString("SW1A 1AA"),
+      "contactName"     -> JsString("Jane Smith"),
+      "telephoneNumber" -> JsString("+44 20 7946 0123"),
+      "stampsThreshold" -> JsNumber(500000)
     )
   }
 
