@@ -52,6 +52,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
       "businessName"    -> JsString("Example Trading Ltd"),
       "addressLine1"    -> JsString("10 Example Street"),
       "addressLine2"    -> JsString("London"),
+      "contactEmail"    -> JsString("email@test.com"),
       "postCode"        -> JsString("SW1A 1AA"),
       "contactName"     -> JsString("Jane Smith"),
       "telephoneNumber" -> JsString("+44 20 7946 0123"),
