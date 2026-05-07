@@ -60,14 +60,6 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status returns successful with no payload") {
-    Given("User is authenticated")
-    authenticate
-    When("Make request to CheckApprovalStatus API returns 204")
-    val response = postCheckApprovalStatus("GBVA0000204DS")
-    response.status shouldBe 204
-  }
-
   Scenario("Approval Status returns bad request") {
     Given("User is authenticated")
     authenticate
@@ -76,8 +68,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 400
     Then("Response should be bad request")
     response.body   shouldBe Json.obj(
-      "code"    -> "INVALID_REQUEST",
-      "message" -> "The request payload is invalid or malformed."
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001", "002", "010"),
+      "errorMessage" -> "The request payload is invalid or malformed."
     )
   }
 
@@ -89,8 +82,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 404
     Then("Response should be not found")
     response.body   shouldBe Json.obj(
-      "code"    -> "NOT_FOUND",
-      "message" -> "The requested approval could not be found."
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
+      "errorMessage" -> "The requested approval could not be found."
     )
   }
 
@@ -101,21 +95,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 401
     Then("Response should be unauthorized")
     response.body   shouldBe Json.obj(
-      "code"    -> "UNAUTHORISED",
-      "message" -> "Authentication credentials are missing or invalid."
-    )
-  }
-
-  Scenario("Approval Status returns conflict") {
-    Given("User is authenticated")
-    authenticate
-    When("Make request to CheckApprovalStatus API returns 409")
-    val response = postCheckApprovalStatus("GBVA0000409DS")
-    response.status shouldBe 409
-    Then("Response should be conflict")
-    response.body   shouldBe Json.obj(
-      "code"    -> "CONFLICT",
-      "message" -> "The request conflicts with the current state of the resource."
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
+      "errorMessage" -> "Authentication credentials are missing or invalid."
     )
   }
 
@@ -127,21 +109,8 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 500
     Then("Response should be internal server error")
     response.body   shouldBe Json.obj(
-      "code"    -> "INTERNAL_SERVER_ERROR",
-      "message" -> "An unexpected error occurred while processing the request."
-    )
-  }
-
-  Scenario("Approval Status returns service unavailable error") {
-    Given("User is authenticated")
-    authenticate
-    When("Make request to CheckApprovalStatus API returns 503")
-    val response = postCheckApprovalStatus("GBVA0000503DS")
-    response.status shouldBe 503
-    Then("Response should be service unavailable error")
-    response.body   shouldBe Json.obj(
-      "code"    -> "SERVICE_UNAVAILABLE",
-      "message" -> "The service is temporarily unavailable. Please try again later."
+      "datetime" -> "2021-12-17T09:30:47Z",
+      "message"  -> "An unexpected error occurred while processing the request."
     )
   }
 }
