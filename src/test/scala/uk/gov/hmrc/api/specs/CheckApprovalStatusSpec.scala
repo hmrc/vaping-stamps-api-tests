@@ -88,6 +88,20 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
+  Scenario("Approval Status returns Business Error") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 422")
+    val response = postCheckApprovalStatus("GBVA0000422DS")
+    response.status shouldBe 422
+    Then("Response should be not found")
+    response.body   shouldBe Json.obj(
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
+      "errorMessage" -> "Business validation failure"
+    )
+  }
+
   Scenario("Approval Status returns unauthorized") {
     Given("User is not authenticated")
     When("Make request to CheckApprovalStatus API returns 401")
@@ -98,6 +112,19 @@ class CheckApprovalStatusSpec extends BaseSpec {
       "datetime"     -> "2021-12-17T09:30:47Z",
       "errorCode"    -> Seq("001"),
       "errorMessage" -> "Authentication credentials are missing or invalid."
+    )
+  }
+
+  Scenario("Approval Status returns Forbidden") {
+    Given("User is not authenticated")
+    When("Make request to CheckApprovalStatus API returns 403")
+    val response = postCheckApprovalStatus("GBVA0000403DS")
+    response.status shouldBe 403
+    Then("Response should be Forbidden")
+    response.body   shouldBe Json.obj(
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
+      "errorMessage" -> "You are not authorised to access this resource."
     )
   }
 
