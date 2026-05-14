@@ -50,14 +50,6 @@ trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with Http
       10.seconds
     )
 
-  def getCheckApprovalStatus(id: String): StandaloneWSRequest#Response =
-    Await.result(
-      mkRequest(s"http://localhost:7011/status/$id/summary")
-        .withHttpHeaders("Authorization" -> bearerToken)
-        .get(),
-      10.seconds
-    )
-
   def postCheckApprovalStatus(id: String): StandaloneWSRequest#Response =
     Await.result(
       mkRequest("http://localhost:7011/status")
