@@ -51,7 +51,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.body   shouldBe Json.obj(
       "code"    -> "BAD_REQUEST",
       "message" -> "The request is invalid",
-      "errors"  -> Seq("008")
+      "errors"  -> Seq("006")
     )
   }
 
