@@ -54,6 +54,7 @@ trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with Http
     Await.result(
       mkRequest("http://localhost:7011/status")
         .withHttpHeaders(
+          "Accept"        -> "application/vnd.hmrc.1.0+json",
           "Authorization" -> bearerToken,
           "Content-Type"  -> "application/json"
         )

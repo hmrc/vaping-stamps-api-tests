@@ -49,9 +49,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 400
     Then("Response should be bad request")
     response.body   shouldBe Json.obj(
-      "datetime"     -> "2021-12-17T09:30:47Z",
-      "errorCode"    -> Seq("001", "002", "010"),
-      "errorMessage" -> "The request payload is invalid or malformed."
+      "code"    -> "BAD_REQUEST",
+      "message" -> "The request is invalid",
+      "errors"  -> Seq("006")
     )
   }
 
