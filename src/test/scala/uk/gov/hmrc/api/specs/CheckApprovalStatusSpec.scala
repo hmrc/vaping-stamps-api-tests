@@ -44,11 +44,10 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 200")
-    val response = postCheckApprovalStatus("GBVA0000200DS")
+    val response = postCheckApprovalStatus("GBVA0000266DS")
     response.status shouldBe 200
     Then("ApprovalStatus should be NOT_APPROVED")
-    response.body shouldBe Json.obj(
-      "approvalStatus" -> JsString("NOT_APPROVED"))
+    response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
   }
 
   Scenario("Approval Status request returns bad request") {
@@ -71,9 +70,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000401DS")
     response.status shouldBe 401
     Then("Response should be unauthorized")
-    response.body shouldBe Json.obj(
-      "datetime" -> "2021-12-17T09:30:47Z",
-      "errorCode" -> Seq("001"),
+    response.body   shouldBe Json.obj(
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
       "errorMessage" -> "Authentication credentials are missing or invalid."
     )
   }
@@ -84,9 +83,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     val response = postCheckApprovalStatus("GBVA0000403DS")
     response.status shouldBe 403
     Then("Response should be Forbidden")
-    response.body shouldBe Json.obj(
-      "datetime" -> "2021-12-17T09:30:47Z",
-      "errorCode" -> Seq("001"),
+    response.body   shouldBe Json.obj(
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
       "errorMessage" -> "You are not authorised to access this resource."
     )
   }
