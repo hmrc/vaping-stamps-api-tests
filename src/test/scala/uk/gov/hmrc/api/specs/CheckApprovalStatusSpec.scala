@@ -21,7 +21,7 @@ import play.api.libs.ws.JsonBodyReadables.readableAsJson
 
 class CheckApprovalStatusSpec extends BaseSpec {
 
-  Scenario("Approval Status returns as Approved - POST") {
+  Scenario("Approval Status request returns as Approved - POST") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 200")
@@ -33,7 +33,6 @@ class CheckApprovalStatusSpec extends BaseSpec {
       "businessName"    -> JsString("Example Trading Ltd"),
       "addressLine1"    -> JsString("10 Example Street"),
       "addressLine2"    -> JsString("London"),
-      "contactEmail"    -> JsString("email@test.com"),
       "postCode"        -> JsString("SW1A 1AA"),
       "contactName"     -> JsString("Jane Smith"),
       "telephoneNumber" -> JsString("+44 20 7946 0123"),
@@ -41,7 +40,17 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status returns bad request") {
+  Scenario("Approval Status request returns as Not Approved - POST") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 200")
+    val response = postCheckApprovalStatus("GBVA0000266DS")
+    response.status shouldBe 200
+    Then("ApprovalStatus should be NOT_APPROVED")
+    response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
+  }
+
+  Scenario("Approval Status request returns bad request") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 400")
@@ -55,7 +64,33 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status returns not found") {
+  Scenario("Approval Status request returns unauthorized") {
+    Given("User is not authenticated")
+    When("Make request to CheckApprovalStatus API returns 401")
+    val response = postCheckApprovalStatus("GBVA0000401DS")
+    response.status shouldBe 401
+    Then("Response should be unauthorized")
+    response.body   shouldBe Json.obj(
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
+      "errorMessage" -> "Authentication credentials are missing or invalid."
+    )
+  }
+
+  Scenario("Approval Status request returns Forbidden") {
+    Given("User is not authenticated")
+    When("Make request to CheckApprovalStatus API returns 403")
+    val response = postCheckApprovalStatus("GBVA0000403DS")
+    response.status shouldBe 403
+    Then("Response should be Forbidden")
+    response.body   shouldBe Json.obj(
+      "datetime"     -> "2021-12-17T09:30:47Z",
+      "errorCode"    -> Seq("001"),
+      "errorMessage" -> "You are not authorised to access this resource."
+    )
+  }
+
+  Scenario("Approval Status request returns not found") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 404")
@@ -69,7 +104,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status returns Business Error") {
+  Scenario("Approval Status request returns Business Error") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 422")
@@ -83,33 +118,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status returns unauthorized") {
-    Given("User is not authenticated")
-    When("Make request to CheckApprovalStatus API returns 401")
-    val response = postCheckApprovalStatus("GBVA0000401DS")
-    response.status shouldBe 401
-    Then("Response should be unauthorized")
-    response.body   shouldBe Json.obj(
-      "datetime"     -> "2021-12-17T09:30:47Z",
-      "errorCode"    -> Seq("001"),
-      "errorMessage" -> "Authentication credentials are missing or invalid."
-    )
-  }
-
-  Scenario("Approval Status returns Forbidden") {
-    Given("User is not authenticated")
-    When("Make request to CheckApprovalStatus API returns 403")
-    val response = postCheckApprovalStatus("GBVA0000403DS")
-    response.status shouldBe 403
-    Then("Response should be Forbidden")
-    response.body   shouldBe Json.obj(
-      "datetime"     -> "2021-12-17T09:30:47Z",
-      "errorCode"    -> Seq("001"),
-      "errorMessage" -> "You are not authorised to access this resource."
-    )
-  }
-
-  Scenario("Approval Status returns internal server error") {
+  Scenario("Approval Status request returns internal server error") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 500")
