@@ -40,11 +40,40 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
+  Scenario("Approval Status request from NI returns as Approved - POST") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 200")
+    val response = postCheckApprovalStatus("XIVA0000200DS")
+    response.status shouldBe 200
+    Then("ApprovalStatus should be APPROVED")
+    response.body   shouldBe Json.obj(
+      "approvalStatus"  -> JsString("APPROVED"),
+      "businessName"    -> JsString("Example Trading Ltd"),
+      "addressLine1"    -> JsString("10 Example Street"),
+      "addressLine2"    -> JsString("Belfast"),
+      "postCode"        -> JsString("BT1 1AA"),
+      "contactName"     -> JsString("Jane Smith"),
+      "telephoneNumber" -> JsString("+44 20 7946 0123"),
+      "stampsThreshold" -> JsNumber(500000)
+    )
+  }
+
   Scenario("Approval Status request returns as Not Approved - POST") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 200")
     val response = postCheckApprovalStatus("GBVA0000266DS")
+    response.status shouldBe 200
+    Then("ApprovalStatus should be NOT_APPROVED")
+    response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
+  }
+
+  Scenario("Approval Status request from NI returns as Not Approved - POST") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 200")
+    val response = postCheckApprovalStatus("XIVA0000266DS")
     response.status shouldBe 200
     Then("ApprovalStatus should be NOT_APPROVED")
     response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
