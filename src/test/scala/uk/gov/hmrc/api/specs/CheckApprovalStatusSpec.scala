@@ -95,41 +95,50 @@ class CheckApprovalStatusSpec extends BaseSpec {
 
   Scenario("Approval Status request returns unauthorized") {
     Given("User is not authenticated")
-    When("Make request to CheckApprovalStatus API returns 401")
-    val response = postCheckApprovalStatus("GBVA0000401DS")
+    When("Make request to CheckApprovalStatus API returns 502 when 401 is returned by EIS")
+    val response = postCheckApprovalStatusUnauthorized
     response.status shouldBe 401
     Then("Response should be unauthorized")
     response.body   shouldBe Json.obj(
-      "datetime"     -> "2021-12-17T09:30:47Z",
-      "errorCode"    -> Seq("001"),
-      "errorMessage" -> "Authentication credentials are missing or invalid."
+      "statusCode" -> 401,
+      "message"    -> "Invalid bearer token"
     )
   }
 
-  Scenario("Approval Status request returns Forbidden") {
+  Scenario("Approval Status request returns bad gateway - 401 EIS response") {
     Given("User is not authenticated")
-    When("Make request to CheckApprovalStatus API returns 403")
-    val response = postCheckApprovalStatus("GBVA0000403DS")
-    response.status shouldBe 403
-    Then("Response should be Forbidden")
+    When("Make request to CheckApprovalStatus API returns 502 when 401 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA0000401DS")
+    response.status shouldBe 502
+    Then("Response should be unauthorized")
     response.body   shouldBe Json.obj(
-      "datetime"     -> "2021-12-17T09:30:47Z",
-      "errorCode"    -> Seq("001"),
-      "errorMessage" -> "You are not authorised to access this resource."
+      "code"    -> "BAD_GATEWAY",
+      "message" -> "Error has occurred in downstream service"
     )
   }
 
-  Scenario("Approval Status request returns not found") {
+  Scenario("Approval Status request returns bad gateway - 403 EIS response") {
+    Given("User is not authenticated")
+    When("Make request to CheckApprovalStatus API returns 502 when 403 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA0000403DS")
+    response.status shouldBe 502
+    Then("Response should be 502")
+    response.body   shouldBe Json.obj(
+      "code"    -> "BAD_GATEWAY",
+      "message" -> "Error has occurred in downstream service"
+    )
+  }
+
+  Scenario("Approval Status request returns bad gateway - 404 EIS response") {
     Given("User is authenticated")
     authenticate
-    When("Make request to CheckApprovalStatus API returns 404")
+    When("Make request to CheckApprovalStatus API returns 502 when 404 is returned by EIS")
     val response = postCheckApprovalStatus("GBVA0000404DS")
-    response.status shouldBe 404
-    Then("Response should be not found")
+    response.status shouldBe 502
+    Then("Response should be 502")
     response.body   shouldBe Json.obj(
-      "datetime"     -> "2021-12-17T09:30:47Z",
-      "errorCode"    -> Seq("001"),
-      "errorMessage" -> "The requested approval could not be found."
+      "code"    -> "BAD_GATEWAY",
+      "message" -> "Error has occurred in downstream service"
     )
   }
 
@@ -141,9 +150,9 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 422
     Then("Response should be not found")
     response.body   shouldBe Json.obj(
-      "datetime"     -> "2021-12-17T09:30:47Z",
-      "errorCode"    -> Seq("001"),
-      "errorMessage" -> "Business validation failure"
+      "code"    -> "UNPROCESSABLE_ENTITY",
+      "message" -> "The request has returned a business logic error.",
+      "errors"  -> Seq("001")
     )
   }
 
@@ -155,8 +164,47 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 500
     Then("Response should be internal server error")
     response.body   shouldBe Json.obj(
-      "datetime" -> "2021-12-17T09:30:47Z",
-      "message"  -> "An unexpected error occurred while processing the request."
+      "code"    -> "INTERNAL_SERVER_ERROR",
+      "message" -> "Success response received invalid JSON response"
+    )
+  }
+
+  Scenario("Approval Status request returns bad gateway - 500 EIS response") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 502 when 500 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA1000502DS")
+    response.status shouldBe 502
+    Then("Response should be 502")
+    response.body   shouldBe Json.obj(
+      "code"    -> "BAD_GATEWAY",
+      "message" -> "Error has occurred in downstream service"
+    )
+  }
+
+  Scenario("Approval Status request returns bad gateway - 502 EIS response") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 502 when 502 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA0000502DS")
+    response.status shouldBe 502
+    Then("Response should be 502")
+    response.body   shouldBe Json.obj(
+      "code"    -> "BAD_GATEWAY",
+      "message" -> "Error has occurred in downstream service"
+    )
+  }
+
+  Scenario("Approval Status request returns bad gateway - 503 EIS response") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 502 when 503 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA2000502DS")
+    response.status shouldBe 502
+    Then("Response should be 502")
+    response.body   shouldBe Json.obj(
+      "code"    -> "BAD_GATEWAY",
+      "message" -> "Error has occurred in downstream service"
     )
   }
 }
