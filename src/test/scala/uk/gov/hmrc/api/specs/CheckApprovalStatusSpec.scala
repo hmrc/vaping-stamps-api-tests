@@ -79,18 +79,12 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
   }
 
-  Scenario("Approval Status request returns bad request") {
+  Scenario("Approval Status request returns not found") {
     Given("User is authenticated")
     authenticate
-    When("Make request to CheckApprovalStatus API returns 400")
-    val response = postCheckApprovalStatus("INVALID_ID")
-    response.status shouldBe 400
-    Then("Response should be bad request")
-    response.body   shouldBe Json.obj(
-      "code"    -> "BAD_REQUEST",
-      "message" -> "The request is invalid",
-      "errors"  -> Seq("006")
-    )
+    When("Make request to CheckApprovalStatus API returns 404")
+    val response = postCheckApprovalStatusNotFound
+    response.status shouldBe 404
   }
 
   Scenario("Approval Status request returns unauthorized") {
@@ -121,19 +115,6 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is not authenticated")
     When("Make request to CheckApprovalStatus API returns 502 when 403 is returned by EIS")
     val response = postCheckApprovalStatus("GBVA0000403DS")
-    response.status shouldBe 502
-    Then("Response should be 502")
-    response.body   shouldBe Json.obj(
-      "code"    -> "BAD_GATEWAY",
-      "message" -> "Error has occurred in downstream service"
-    )
-  }
-
-  Scenario("Approval Status request returns bad gateway - 404 EIS response") {
-    Given("User is authenticated")
-    authenticate
-    When("Make request to CheckApprovalStatus API returns 502 when 404 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA0000404DS")
     response.status shouldBe 502
     Then("Response should be 502")
     response.body   shouldBe Json.obj(
