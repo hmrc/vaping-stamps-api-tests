@@ -68,4 +68,42 @@ trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with Http
         ),
       10.seconds
     )
+
+  def postCheckApprovalStatusUnauthorized: StandaloneWSRequest#Response =
+    Await.result(
+      mkRequest("http://localhost:7011/status")
+        .withHttpHeaders(
+          "Accept"        -> "application/vnd.hmrc.1.0+json",
+          "Authorization" -> "random token",
+          "Content-Type"  -> "application/json"
+        )
+        .post(
+          Json.stringify(
+            Json.obj(
+              "vdsEmail"              -> JsString("email@test.com"),
+              "stampsReferenceNumber" -> JsString("GBVA0000200DS")
+            )
+          )
+        ),
+      10.seconds
+    )
+
+  def postCheckApprovalStatusNotFound: StandaloneWSRequest#Response =
+    Await.result(
+      mkRequest("http://localhost:7011/check")
+        .withHttpHeaders(
+          "Accept"        -> "application/vnd.hmrc.1.0+json",
+          "Authorization" -> "random token",
+          "Content-Type"  -> "application/json"
+        )
+        .post(
+          Json.stringify(
+            Json.obj(
+              "vdsEmail"              -> JsString("email@test.com"),
+              "stampsReferenceNumber" -> JsString("GBVA0000200DS")
+            )
+          )
+        ),
+      10.seconds
+    )
 }
