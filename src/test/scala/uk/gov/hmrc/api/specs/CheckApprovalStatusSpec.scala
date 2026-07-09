@@ -150,7 +150,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 500 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 500 EIS response") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 503 when 500 is returned by EIS")
@@ -163,7 +163,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 502 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 502 EIS response") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 503 when 502 is returned by EIS")
@@ -176,7 +176,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 503 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 503 EIS response") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 503 when 503 is returned by EIS")
