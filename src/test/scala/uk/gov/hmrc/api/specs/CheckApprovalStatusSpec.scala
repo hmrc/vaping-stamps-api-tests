@@ -99,26 +99,26 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 401 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 401 EIS response") {
     Given("User is not authenticated")
-    When("Make request to CheckApprovalStatus API returns 502 when 401 is returned by EIS")
+    When("Make request to CheckApprovalStatus API returns 503 when 401 is returned by EIS")
     val response = postCheckApprovalStatus("GBVA0000401DS")
-    response.status shouldBe 502
-    Then("Response should be unauthorized")
+    response.status shouldBe 503
+    Then("Response should be 503")
     response.body   shouldBe Json.obj(
-      "code"    -> "BAD_GATEWAY",
+      "code"    -> "SERVICE_UNAVAILABLE",
       "message" -> "Error has occurred in downstream service"
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 403 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 403 EIS response") {
     Given("User is not authenticated")
-    When("Make request to CheckApprovalStatus API returns 502 when 403 is returned by EIS")
+    When("Make request to CheckApprovalStatus API returns 503 when 403 is returned by EIS")
     val response = postCheckApprovalStatus("GBVA0000403DS")
-    response.status shouldBe 502
-    Then("Response should be 502")
+    response.status shouldBe 503
+    Then("Response should be 503")
     response.body   shouldBe Json.obj(
-      "code"    -> "BAD_GATEWAY",
+      "code"    -> "SERVICE_UNAVAILABLE",
       "message" -> "Error has occurred in downstream service"
     )
   }
@@ -150,41 +150,41 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 500 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 500 EIS response") {
     Given("User is authenticated")
     authenticate
-    When("Make request to CheckApprovalStatus API returns 502 when 500 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA1000502DS")
-    response.status shouldBe 502
-    Then("Response should be 502")
+    When("Make request to CheckApprovalStatus API returns 503 when 500 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA1000503DS")
+    response.status shouldBe 503
+    Then("Response should be 503")
     response.body   shouldBe Json.obj(
-      "code"    -> "BAD_GATEWAY",
+      "code"    -> "SERVICE_UNAVAILABLE",
       "message" -> "Error has occurred in downstream service"
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 502 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 502 EIS response") {
     Given("User is authenticated")
     authenticate
-    When("Make request to CheckApprovalStatus API returns 502 when 502 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA0000502DS")
-    response.status shouldBe 502
-    Then("Response should be 502")
+    When("Make request to CheckApprovalStatus API returns 503 when 502 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA0000503DS")
+    response.status shouldBe 503
+    Then("Response should be 503")
     response.body   shouldBe Json.obj(
-      "code"    -> "BAD_GATEWAY",
+      "code"    -> "SERVICE_UNAVAILABLE",
       "message" -> "Error has occurred in downstream service"
     )
   }
 
-  Scenario("Approval Status request returns bad gateway - 503 EIS response") {
+  Scenario("Approval Status request returns service unavailable - 503 EIS response") {
     Given("User is authenticated")
     authenticate
-    When("Make request to CheckApprovalStatus API returns 502 when 503 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA2000502DS")
-    response.status shouldBe 502
-    Then("Response should be 502")
+    When("Make request to CheckApprovalStatus API returns 503 when 503 is returned by EIS")
+    val response = postCheckApprovalStatus("GBVA2000503DS")
+    response.status shouldBe 503
+    Then("Response should be 503")
     response.body   shouldBe Json.obj(
-      "code"    -> "BAD_GATEWAY",
+      "code"    -> "SERVICE_UNAVAILABLE",
       "message" -> "Error has occurred in downstream service"
     )
   }
