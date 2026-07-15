@@ -44,7 +44,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 200")
-    val response = postCheckApprovalStatus("XIVA0000200DS")
+    val response = postCheckApprovalStatus("XIVC0000200DS")
     response.status shouldBe 200
     Then("ApprovalStatus should be APPROVED")
     response.body   shouldBe Json.obj(
@@ -63,7 +63,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 200")
-    val response = postCheckApprovalStatus("GBVA0000266DS")
+    val response = postCheckApprovalStatus("GBVR0000266DS")
     response.status shouldBe 200
     Then("ApprovalStatus should be NOT_APPROVED")
     response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
