@@ -129,11 +129,25 @@ class CheckApprovalStatusSpec extends BaseSpec {
     When("Make request to CheckApprovalStatus API returns 422")
     val response = postCheckApprovalStatus("GBVA0000422DS")
     response.status shouldBe 422
-    Then("Response should be not found")
+    Then("Response should Unprocessable Entity")
     response.body   shouldBe Json.obj(
       "code"    -> "UNPROCESSABLE_ENTITY",
       "message" -> "The request has returned a business logic error.",
       "errors"  -> Seq("001")
+    )
+  }
+
+  Scenario("Approval Status request returns Business Error with 003") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 422")
+    val response = postCheckApprovalStatus("GBVA2000422DS")
+    response.status shouldBe 422
+    Then("Response should Unprocessable Entity")
+    response.body   shouldBe Json.obj(
+      "code"    -> "UNPROCESSABLE_ENTITY",
+      "message" -> "The request has returned a business logic error.",
+      "errors"  -> Seq("003")
     )
   }
 
