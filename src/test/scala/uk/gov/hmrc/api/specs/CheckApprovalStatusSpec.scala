@@ -25,7 +25,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 200")
-    val response = postCheckApprovalStatus("GBVA0000200DS")
+    val response = postCheckApprovalStatus("GBVC0000200DS")
     response.status shouldBe 200
     Then("ApprovalStatus should be APPROVED")
     response.body   shouldBe Json.obj(
@@ -102,7 +102,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
   Scenario("Approval Status request returns service unavailable - 401 EIS response") {
     Given("User is not authenticated")
     When("Make request to CheckApprovalStatus API returns 503 when 401 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA0000401DS")
+    val response = postCheckApprovalStatus("GBVC0000401DS")
     response.status shouldBe 503
     Then("Response should be 503")
     response.body   shouldBe Json.obj(
@@ -114,7 +114,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
   Scenario("Approval Status request returns service unavailable - 403 EIS response") {
     Given("User is not authenticated")
     When("Make request to CheckApprovalStatus API returns 503 when 403 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA0000403DS")
+    val response = postCheckApprovalStatus("GBVC0000403DS")
     response.status shouldBe 503
     Then("Response should be 503")
     response.body   shouldBe Json.obj(
@@ -127,7 +127,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 422")
-    val response = postCheckApprovalStatus("GBVA0000422DS")
+    val response = postCheckApprovalStatus("GBVC0000422DS")
     response.status shouldBe 422
     Then("Response should Unprocessable Entity")
     response.body   shouldBe Json.obj(
@@ -141,7 +141,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 422")
-    val response = postCheckApprovalStatus("GBVA2000422DS")
+    val response = postCheckApprovalStatus("GBVC2000422DS")
     response.status shouldBe 422
     Then("Response should Unprocessable Entity")
     response.body   shouldBe Json.obj(
@@ -155,7 +155,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 500")
-    val response = postCheckApprovalStatus("GBVA0000500DS")
+    val response = postCheckApprovalStatus("GBVC0000500DS")
     response.status shouldBe 500
     Then("Response should be internal server error")
     response.body   shouldBe Json.obj(
@@ -168,7 +168,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 503 when 500 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA1000503DS")
+    val response = postCheckApprovalStatus("GBVC1000503DS")
     response.status shouldBe 503
     Then("Response should be 503")
     response.body   shouldBe Json.obj(
@@ -181,7 +181,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 503 when 502 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA0000503DS")
+    val response = postCheckApprovalStatus("GBVC0000503DS")
     response.status shouldBe 503
     Then("Response should be 503")
     response.body   shouldBe Json.obj(
@@ -194,7 +194,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 503 when 503 is returned by EIS")
-    val response = postCheckApprovalStatus("GBVA2000503DS")
+    val response = postCheckApprovalStatus("GBVC2000503DS")
     response.status shouldBe 503
     Then("Response should be 503")
     response.body   shouldBe Json.obj(
