@@ -81,7 +81,7 @@ trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with Http
           Json.stringify(
             Json.obj(
               "vdsEmail"              -> JsString("email@test.com"),
-              "stampsReferenceNumber" -> JsString("GBVA0000200DS")
+              "stampsReferenceNumber" -> JsString("GBVC0000200DS")
             )
           )
         ),
@@ -100,7 +100,7 @@ trait BaseSpec extends AnyFeatureSpec with GivenWhenThen with Matchers with Http
           Json.stringify(
             Json.obj(
               "vdsEmail"              -> JsString("email@test.com"),
-              "stampsReferenceNumber" -> JsString("GBVA0000200DS")
+              "stampsReferenceNumber" -> JsString("GBVC0000200DS")
             )
           )
         ),
