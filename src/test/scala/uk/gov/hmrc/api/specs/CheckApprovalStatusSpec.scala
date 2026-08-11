@@ -235,13 +235,13 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 422")
-    val response = postCheckApprovalStatus("GBVC0000422DS")
+    val response = postCheckApprovalStatus("GBVC1000422DS")
     response.status shouldBe 422
     Then("Response should Unprocessable Entity")
     response.body   shouldBe Json.obj(
       "code"    -> "UNPROCESSABLE_ENTITY",
       "message" -> "The request has returned a business logic error.",
-      "errors"  -> Seq("001")
+      "errors"  -> Seq("002")
     )
   }
 
