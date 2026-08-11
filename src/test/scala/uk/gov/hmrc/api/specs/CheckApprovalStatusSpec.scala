@@ -16,8 +16,12 @@
 
 package uk.gov.hmrc.api.specs
 
-import play.api.libs.json.{JsNumber, JsString, Json}
+import play.api.libs.json.{JsArray, JsNumber, JsString, Json}
+import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
+
+import scala.concurrent.Await
+import scala.concurrent.duration.DurationInt
 
 class CheckApprovalStatusSpec extends BaseSpec {
 
@@ -79,12 +83,94 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
   }
 
-  Scenario("Approval Status request returns not found") {
+  Scenario("Approval Status request returns BAD_REQUEST with invalid and 005, 007 sequence of errors") {
     Given("User is authenticated")
     authenticate
-    When("Make request to CheckApprovalStatus API returns 404")
-    val response = postCheckApprovalStatusNotFound
-    response.status shouldBe 404
+    When("Make request to CheckApprovalStatus API returns 400")
+    val response =
+      Await.result(
+        mkRequest("http://localhost:7011/status")
+          .withHttpHeaders(
+            "Accept"        -> "application/vnd.hmrc.1.0+json",
+            "Authorization" -> bearerToken,
+            "Content-Type"  -> "application/json"
+          )
+          .post(
+            Json.stringify(
+              Json.obj(
+              )
+            )
+          ),
+        10.seconds
+      )
+    response.status shouldBe 400
+    response.body shouldBe Json.obj(
+      "code"    -> "BAD_REQUEST",
+      "message" -> "The request is invalid",
+      "errors"  -> Seq("005", "007")
+    )
+  }
+
+  Scenario("Approval Status request returns BAD_REQUEST with invalid and 002, 004, 006, 008 sequence of errors") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 400")
+    val response =
+      Await.result(
+        mkRequest("http://localhost:7011/status")
+          .withHttpHeaders(
+            "Accept"        -> "application/vnd",
+            "Authorization" -> bearerToken,
+            "Content-Type"  -> "text/json"
+          )
+          .post(
+            Json.stringify(
+              Json.obj(
+                "vdsEmail"              -> JsString("em@ail@te@st.com"),
+                "stampsReferenceNumber" -> JsString("GBVC0000AAA200DS")
+              )
+            )
+          ),
+        10.seconds
+      )
+    response.status shouldBe 400
+    response.body shouldBe Json.obj(
+      "code"    -> "BAD_REQUEST",
+      "message" -> "The request is invalid",
+      "errors"  -> Seq("002", "004", "006", "008")
+    )
+  }
+
+  Scenario("Approval Status request returns BAD_REQUEST with invalid response and error 009") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 400")
+    val response =
+      Await.result(
+        mkRequest("http://localhost:7011/status")
+          .withHttpHeaders(
+            "Accept"        -> "application/vnd.hmrc.1.0+json",
+            "Authorization" -> bearerToken,
+            "Content-Type"  -> "application/json"
+          )
+          .post(
+            Json.stringify(
+              Json.obj(
+                "vdsEmail"              -> JsString(
+                  "0234567890123456789022345678903234567890423456789052345678906234@0234567890123456789022345678903234567890423456789052345678906234.0234567890123456789022345678903234567890423456789052345678901"
+                ),
+                "stampsReferenceNumber" -> JsString("GBVC0000200DS")
+              )
+            )
+          ),
+        10.seconds
+      )
+    response.status shouldBe 400
+    response.body shouldBe Json.obj(
+      "code"    -> "BAD_REQUEST",
+      "message" -> "The request is invalid",
+      "errors"  -> Seq("009")
+    )
   }
 
   Scenario("Approval Status request returns unauthorized") {
@@ -123,7 +209,29 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns Business Error") {
+  Scenario("Approval Status request returns not found") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 404")
+    val response = postCheckApprovalStatusNotFound
+    response.status shouldBe 404
+  }
+
+  Scenario("Approval Status request returns Business Error with 001") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 422")
+    val response = postCheckApprovalStatus("GBVC0000422DS")
+    response.status shouldBe 422
+    Then("Response should Unprocessable Entity")
+    response.body   shouldBe Json.obj(
+      "code"    -> "UNPROCESSABLE_ENTITY",
+      "message" -> "The request has returned a business logic error.",
+      "errors"  -> Seq("001")
+    )
+  }
+
+  Scenario("Approval Status request returns Business Error with 002") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 422")
