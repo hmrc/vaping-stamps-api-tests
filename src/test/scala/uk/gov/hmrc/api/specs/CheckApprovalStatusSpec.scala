@@ -16,7 +16,7 @@
 
 package uk.gov.hmrc.api.specs
 
-import play.api.libs.json.{JsArray, JsNumber, JsString, Json}
+import play.api.libs.json.{JsNumber, JsString, Json}
 import play.api.libs.ws.DefaultBodyWritables.writeableOf_String
 import play.api.libs.ws.JsonBodyReadables.readableAsJson
 
