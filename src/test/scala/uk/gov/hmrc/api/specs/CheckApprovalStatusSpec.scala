@@ -83,7 +83,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
   }
 
-  Scenario("Approval Status request returns BAD_REQUEST with invalid and 005, 007 sequence of errors") {
+  Scenario("Approval Status request returns BAD_REQUEST with invalid and 001, 005, 007 sequence of errors") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 400")
@@ -91,7 +91,6 @@ class CheckApprovalStatusSpec extends BaseSpec {
       Await.result(
         mkRequest("http://localhost:7011/status")
           .withHttpHeaders(
-            "Accept"        -> "application/vnd.hmrc.1.0+json",
             "Authorization" -> bearerToken,
             "Content-Type"  -> "application/json"
           )
@@ -108,6 +107,34 @@ class CheckApprovalStatusSpec extends BaseSpec {
       "code"    -> "BAD_REQUEST",
       "message" -> "The request is invalid",
       "errors"  -> Seq("005", "007")
+    )
+  }
+
+  Scenario("Approval Status request returns Unsupported Media Type") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 415")
+    val response =
+      Await.result(
+        mkRequest("http://localhost:7011/status")
+          .withHttpHeaders(
+            "Accept"        -> "application/vnd.hmrc.1.0+json",
+            "Authorization" -> bearerToken
+          )
+          .post(
+            Json.stringify(
+              Json.obj(
+                "vdsEmail"              -> JsString("email@test.com"),
+                "stampsReferenceNumber" -> JsString("GBVC0000200DS")
+              )
+            )
+          ),
+        10.seconds
+      )
+    response.status shouldBe 415
+    response.body shouldBe Json.obj(
+      "statusCode" -> 415,
+      "message" -> "Expecting text/json or application/json body"
     )
   }
 
