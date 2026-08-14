@@ -110,34 +110,6 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns Unsupported Media Type") {
-    Given("User is authenticated")
-    authenticate
-    When("Make request to CheckApprovalStatus API returns 415")
-    val response =
-      Await.result(
-        mkRequest("http://localhost:7011/status")
-          .withHttpHeaders(
-            "Accept"        -> "application/vnd.hmrc.1.0+json",
-            "Authorization" -> bearerToken
-          )
-          .post(
-            Json.stringify(
-              Json.obj(
-                "vdsEmail"              -> JsString("email@test.com"),
-                "stampsReferenceNumber" -> JsString("GBVC0000200DS")
-              )
-            )
-          ),
-        10.seconds
-      )
-    response.status shouldBe 415
-    response.body shouldBe Json.obj(
-      "statusCode" -> 415,
-      "message" -> "Expecting text/json or application/json body"
-    )
-  }
-
   Scenario("Approval Status request returns BAD_REQUEST with invalid and 002, 004, 006, 008 sequence of errors") {
     Given("User is authenticated")
     authenticate
@@ -242,6 +214,34 @@ class CheckApprovalStatusSpec extends BaseSpec {
     When("Make request to CheckApprovalStatus API returns 404")
     val response = postCheckApprovalStatusNotFound
     response.status shouldBe 404
+  }
+
+  Scenario("Approval Status request returns Unsupported Media Type") {
+    Given("User is authenticated")
+    authenticate
+    When("Make request to CheckApprovalStatus API returns 415")
+    val response =
+      Await.result(
+        mkRequest("http://localhost:7011/status")
+          .withHttpHeaders(
+            "Accept"        -> "application/vnd.hmrc.1.0+json",
+            "Authorization" -> bearerToken
+          )
+          .post(
+            Json.stringify(
+              Json.obj(
+                "vdsEmail"              -> JsString("email@test.com"),
+                "stampsReferenceNumber" -> JsString("GBVC0000200DS")
+              )
+            )
+          ),
+        10.seconds
+      )
+    response.status shouldBe 415
+    response.body shouldBe Json.obj(
+      "statusCode" -> 415,
+      "message" -> "Expecting text/json or application/json body"
+    )
   }
 
   Scenario("Approval Status request returns Business Error with 001") {
