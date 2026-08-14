@@ -240,7 +240,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.status shouldBe 415
     response.body shouldBe Json.obj(
       "statusCode" -> 415,
-      "message" -> "Expecting text/json or application/json body"
+      "message"    -> "Expecting text/json or application/json body"
     )
   }
 
