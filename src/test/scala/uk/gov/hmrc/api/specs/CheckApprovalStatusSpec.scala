@@ -83,7 +83,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.body   shouldBe Json.obj("approvalStatus" -> JsString("NOT_APPROVED"))
   }
 
-  Scenario("Approval Status request returns BAD_REQUEST with invalid and 001, 005, 007 sequence of errors") {
+  Scenario("Approval Status request returns BAD_REQUEST with invalid and 002, 005, 007 sequence of errors") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 400")
@@ -106,7 +106,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     response.body shouldBe Json.obj(
       "code"    -> "BAD_REQUEST",
       "message" -> "The request is invalid",
-      "errors"  -> Seq("005", "007")
+      "errors"  -> Seq("002", "005", "007")
     )
   }
 
