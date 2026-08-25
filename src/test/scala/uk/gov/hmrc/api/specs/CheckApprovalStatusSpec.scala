@@ -286,7 +286,7 @@ class CheckApprovalStatusSpec extends BaseSpec {
     )
   }
 
-  Scenario("Approval Status request returns internal server error") {
+  Scenario("Approval Status request returns internal server error (500)") {
     Given("User is authenticated")
     authenticate
     When("Make request to CheckApprovalStatus API returns 500")
