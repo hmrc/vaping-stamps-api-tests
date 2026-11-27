@@ -34,12 +34,12 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Then("ApprovalStatus should be APPROVED")
     response.body   shouldBe Json.obj(
       "approvalStatus"  -> JsString("APPROVED"),
-      "businessName"    -> JsString("Example Trading Ltd"),
-      "addressLine1"    -> JsString("10 Example Street"),
-      "addressLine2"    -> JsString("London"),
-      "postCode"        -> JsString("SW1A 1AA"),
-      "contactName"     -> JsString("Jane Smith"),
-      "telephoneNumber" -> JsString("+44 20 7946 0123"),
+      "businessName"    -> JsString("Test Company"),
+      "addressLine1"    -> JsString("ABC Street"),
+      "addressLine2"    -> JsString("AB Town"),
+      "postCode"        -> JsString("ZZ1 1ZZ"),
+      "contactName"     -> JsString("Firstname Surname"),
+      "telephoneNumber" -> JsString("+44 20 7123 4567"),
       "stampsThreshold" -> JsNumber(500000)
     )
   }
@@ -53,12 +53,12 @@ class CheckApprovalStatusSpec extends BaseSpec {
     Then("ApprovalStatus should be APPROVED")
     response.body   shouldBe Json.obj(
       "approvalStatus"  -> JsString("APPROVED"),
-      "businessName"    -> JsString("Example Trading Ltd"),
-      "addressLine1"    -> JsString("10 Example Street"),
-      "addressLine2"    -> JsString("Belfast"),
-      "postCode"        -> JsString("BT1 1AA"),
-      "contactName"     -> JsString("Jane Smith"),
-      "telephoneNumber" -> JsString("+44 20 7946 0123"),
+      "businessName"    -> JsString("Test Company"),
+      "addressLine1"    -> JsString("ABC Street"),
+      "addressLine2"    -> JsString("NI Town"),
+      "postCode"        -> JsString("NI1 1ZZ"),
+      "contactName"     -> JsString("Firstname Surname"),
+      "telephoneNumber" -> JsString("+44 20 7123 4567"),
       "stampsThreshold" -> JsNumber(500000)
     )
   }
